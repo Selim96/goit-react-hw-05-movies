@@ -1,7 +1,10 @@
-export default function Cast() {
+export default function Cast({cast}) {
     return (
-        <div>
-            <p>this is Cast page!</p>
-        </div>
+        <ul>
+            {cast.map(actor => {
+                const { id, name, character } = actor;
+                return (<li key={id}><img /><h4>{name}</h4><p>Character: {character}</p></li>);
+            })}
+        </ul>
     )
 }

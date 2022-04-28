@@ -20,7 +20,7 @@ export const App = () => {
         <HomePage />
       </Route>
           
-      <Route path="/movies">
+      <Route path="/movies" exact>
         <MoviesPage />
       </Route>
           

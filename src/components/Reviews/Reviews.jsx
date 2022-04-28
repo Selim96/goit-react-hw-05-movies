@@ -1,7 +1,12 @@
-export default function Reviews() {
+import s from './Reviews.module.css';
+
+export default function Reviews({ reviews }) {
     return (
-        <div>
-            <h2>this is reviews page!</h2>
-        </div>
+        <ul className={s.reviewsList}>
+            {reviews.map(rev => {
+                const { author, content, } = rev;
+                return (<li className={s.reviewItem} key={author}><h4>Author: {author}</h4><p>{content}</p></li>);
+            })}
+        </ul>
     )
 }
