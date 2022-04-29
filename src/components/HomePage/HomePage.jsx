@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
-import { Link, useRouteMatch } from "react-router-dom";
+import { Link, useRouteMatch, useLocation } from "react-router-dom";
 import {fetchTrends} from "services/Api";
 
 export default function HomePage() {
     const [films, setFilms] = useState([]);
     const { url } = useRouteMatch();
+    const location = useLocation();
 
     useEffect(() => {
         fetchTrends().then(films =>
@@ -17,7 +18,7 @@ export default function HomePage() {
             <h2>Trending today</h2>
             <ul>
                 {films.map(({id, title, name}) => (
-                    <li key={id}><Link to={`${url}movies/${id}`}>{title || name}</Link></li>
+                    <li key={id}><Link to={{pathname:`${url}movies/${id}`, state: location,}}>{title || name}</Link></li>
                 ))}
             </ul>
         </div>
