@@ -29,8 +29,8 @@ export default function MoviesPage() {
             return;
         }
         fetchMovie(query).then(films => { setFilms(films.results) });
-        console.log(films);
-    },[query])
+
+    }, [query]);
 
     return (
         <div>

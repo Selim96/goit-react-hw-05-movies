@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import { useParams, useHistory, NavLink, useRouteMatch } from "react-router-dom"
 import { fetchMovieById, fetchMovieImage, fetchMovieCredits, fetchMovieReviews } from "services/Api";
-import Cast from "components/Cast";
-import Reviews from "components/Reviews";
 import s from './MovieDetailsPage.module.css';
 import { Route } from "react-router-dom";
+
+const Cast = lazy(() => import("components/Cast"));
+const Reviews = lazy(() => import("components/Reviews"));
 
 export default function MovieDetailsPage() {
     const [movie, setMovie] = useState(null);
@@ -42,7 +43,7 @@ export default function MovieDetailsPage() {
                         <div>
                             <h4>Genres</h4>
                             <ul className={s.genresList}>
-                                {movie.genres.map(genre => (<li key={genre.id}>{genre.name}</li>))}
+                                {movie.genres.map(({id, name, }) => (<li key={id}>{name}</li>))}
                             </ul>
                         </div>
                     </div>
@@ -54,12 +55,14 @@ export default function MovieDetailsPage() {
                         <li><NavLink to={`${url}/reviews`}>Reviews</NavLink></li>
                     </ul>
                 </div>
-                <Route path={`${path}/cast`}>
-                    {cast && <Cast cast={cast}/>}
-                </Route>
-                <Route path="/movies/:movieId/reviews">
-                    {reviews.length !== 0 ? <Reviews reviews={reviews}/> : "We don't have any reviews for this film."}
-                </Route>
+                <Suspense fallback={<h2>Loading, upload...</h2>}>
+                    <Route path={`${path}/cast`}>
+                        {cast && <Cast cast={cast}/>}
+                    </Route>
+                    <Route path="/movies/:movieId/reviews">
+                        {reviews.length !== 0 ? <Reviews reviews={reviews}/> : "We don't have any reviews for this film."}
+                    </Route>
+                </Suspense>
             </div>
         }
     </>
