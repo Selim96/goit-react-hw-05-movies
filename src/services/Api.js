@@ -23,10 +23,13 @@ export function fetchMovie(movie) {
 export function fetchMovieById(movieId) {
     return fetch(`${origin}/movie/${movieId}?api_key=${apiKey}&language=en-US`).then(resp => {
         if (resp.ok) {
-            // const results = resp.json().map(() => { });
-            return resp.json()
+            return resp.json();
         }
         return Promise.reject(new Error(`Something go wrong!`));
+    }).then(obj => {
+            const {poster_path} = obj;
+            const results = { ...obj, poster_path: `${imagePathUrl}${poster_path}`, };
+            return results;
         }).catch(error => console.log(error.message));
 }
 
@@ -36,8 +39,14 @@ export function fetchMovieCredits(movieId) {
             return resp.json()
         }
         return Promise.reject(new Error(`Something go wrong!`));
+        }).then(obj => {
+            const arrayActors = obj.cast;
+            const results = arrayActors.map(actor=>({...actor, profile_path: `${imagePathUrl}${actor.profile_path}`,}));
+            return results;
         }).catch(error => console.log(error.message));
 }
+
+// profile_path
 
 export function fetchMovieReviews(movieId) {
     return fetch(`${origin}/movie/${movieId}/reviews?api_key=${apiKey}&language=en-US&page=1`).then(resp => {

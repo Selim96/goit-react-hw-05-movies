@@ -1,13 +1,10 @@
 import { useState, useEffect, lazy, Suspense, useRef } from "react";
-import { useParams, useHistory, useLocation, NavLink, useRouteMatch } from "react-router-dom"
+import { Route, useParams, useHistory, useLocation, NavLink, useRouteMatch } from "react-router-dom"
 import { fetchMovieById, fetchMovieCredits, fetchMovieReviews } from "services/Api";
 import s from './MovieDetailsPage.module.css';
-import { Route } from "react-router-dom";
 
 const Cast = lazy(() => import("components/Cast"));
 const Reviews = lazy(() => import("components/Reviews"));
-
-const imagePathUrl = "https://image.tmdb.org/t/p/w500";
 
 export default function MovieDetailsPage() {
     const [movie, setMovie] = useState(null);
@@ -19,31 +16,43 @@ export default function MovieDetailsPage() {
     const location = useLocation();
     const { movieId } = useParams();
     const moviesRef = useRef(location);
-    const queryParam = new URLSearchParams(location.search).get('query'); 
-    console.log("location:", location);
-    console.log("history:", history);
 
     useEffect(() => {
-        fetchMovieById(movieId).then(result => { setMovie(result) });
-        fetchMovieCredits(movieId).then(result => { setCast(result.cast) });
-        fetchMovieReviews(movieId).then(result => { setReviews(result.results) });
+        fetchMovieById(movieId).then(result => {
+            setMovie(result);
+        });
     }, [movieId]);
 
     useEffect(() => {
-        
-    }, [queryParam])
+        if (location.pathname !== `${url}/cast`) {
+            return;
+        }
+        fetchMovieCredits(movieId).then(result => { setCast(result) });
+    }, [location.pathname]);
+
+    useEffect(() => {
+        if (location.pathname !== `${url}/reviews`) {
+            return;
+        }
+        fetchMovieReviews(movieId).then(result => { setReviews(result.results) });
+    }, [location.pathname]);
 
     const handlGoBack = () => {
         history.push({ ...moviesRef.current.state });
+    }
+
+    let disabled = true;
+    if (!!moviesRef.current.state ) {
+        disabled = false;
     }
     
     return <>
         {movie && 
             <div>   
                 <div className={s.movieCard}>
-                    <button className={s.button} onClick={handlGoBack}>Go back</button>
+                    <button disabled={disabled} className={s.button} onClick={handlGoBack}>Go back</button>
                     <div className={s.movieDetails}>
-                        <img className={s.movieImage} src={`${imagePathUrl}/${movie.poster_path}`} />
+                        <img className={s.movieImage} src={`${movie.poster_path}`} />
                         <h3 className={s.movieTitle}>{`${movie.original_title} (${(new Date(movie.release_date)).getFullYear()})`}</h3>
                         <p>User score: {(movie.vote_average) * 10}%</p>
                         <div>
@@ -67,7 +76,7 @@ export default function MovieDetailsPage() {
                 </div>
                 <Suspense fallback={<h2>Loading, upload...</h2>}>
                     <Route path={`${path}/cast`}>
-                        {cast && <Cast cast={cast} imageUrl={imagePathUrl}/>}
+                        {cast && <Cast cast={cast} />}
                     </Route>
                     <Route path={`${path}/reviews`}>
                         {reviews.length !== 0 ? <Reviews reviews={reviews}/> : "We don't have any reviews for this film."}
