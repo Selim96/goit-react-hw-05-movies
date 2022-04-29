@@ -28,14 +28,14 @@ export default function MovieDetailsPage() {
             return;
         }
         fetchMovieCredits(movieId).then(result => { setCast(result) });
-    }, [location.pathname]);
+    }, [location.pathname, movieId, url]);
 
     useEffect(() => {
         if (location.pathname !== `${url}/reviews`) {
             return;
         }
         fetchMovieReviews(movieId).then(result => { setReviews(result.results) });
-    }, [location.pathname]);
+    }, [location.pathname, movieId, url]);
 
     const handlGoBack = () => {
         history.push({ ...moviesRef.current.state });
@@ -52,7 +52,7 @@ export default function MovieDetailsPage() {
                 <div className={s.movieCard}>
                     <button disabled={disabled} className={s.button} onClick={handlGoBack}>Go back</button>
                     <div className={s.movieDetails}>
-                        <img className={s.movieImage} src={`${movie.poster_path}`} />
+                        <img className={s.movieImage} src={`${movie.poster_path}`} alt={movie.original_title}/>
                         <h3 className={s.movieTitle}>{`${movie.original_title} (${(new Date(movie.release_date)).getFullYear()})`}</h3>
                         <p>User score: {(movie.vote_average) * 10}%</p>
                         <div>
