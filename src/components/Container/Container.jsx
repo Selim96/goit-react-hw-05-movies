@@ -1,4 +1,3 @@
-import { Children } from 'react';
 import s from './Container.module.css';
 
 export default function Container({children}) {
