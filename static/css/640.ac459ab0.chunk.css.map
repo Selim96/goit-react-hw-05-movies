@@ -1,0 +1,1 @@
+{"version":3,"file":"static/css/640.ac459ab0.chunk.css","mappings":"AAAA,0BACI,gBACJ,CAEA,sBAGI,aAAuB,CADvB,eAAgB,CADhB,kBAGJ","sources":["components/HomePage/HomePage.module.css"],"sourcesContent":[".homePage {\n    padding-top: 15px;\n}\n\n.item {\n    margin-bottom: 10px;\n    font-weight: 600;\n    color: rgb(87, 87, 230);\n}"],"names":[],"sourceRoot":""}
