@@ -81,7 +81,7 @@ export default function MovieDetailsPage() {
                         {cast && <Cast cast={cast} />}
                     </Route>
                     <Route path={`${path}/reviews`}>
-                        {reviews.length !== 0 ? <Reviews reviews={reviews}/> : "We don't have any reviews for this film."}
+                        {reviews.length !== 0 ? <Reviews reviews={reviews}/> : <div className={s.noReview}>We don't have any reviews for this film.</div>}
                     </Route>
                 </Suspense>
             </div>) : <div className={s.emptyFilm}><h2>Sorry, we have not this film</h2></div>
