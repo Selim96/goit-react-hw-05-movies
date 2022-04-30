@@ -22,20 +22,12 @@ export default function MovieDetailsPage() {
         fetchMovieById(movieId).then(result => {
             setMovie(result);
         });
-    }, [movieId]);
-
-    useEffect(() => {
-        if (location.pathname !== `${url}/cast`) {
-            return;
+        if (location.pathname === `${url}/cast`) {
+            fetchMovieCredits(movieId).then(result => { setCast(result) });
         }
-        fetchMovieCredits(movieId).then(result => { setCast(result) });
-    }, [location.pathname, movieId, url]);
-
-    useEffect(() => {
-        if (location.pathname !== `${url}/reviews`) {
-            return;
+        if (location.pathname === `${url}/reviews`) {
+            fetchMovieReviews(movieId).then(result => { setReviews(result.results) });
         }
-        fetchMovieReviews(movieId).then(result => { setReviews(result.results) });
     }, [location.pathname, movieId, url]);
 
     const handlGoBack = () => {
