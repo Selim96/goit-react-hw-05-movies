@@ -4,7 +4,9 @@ import { fetchMovie } from 'services/Api';
 import s from './MoviesPage.module.css';
 
 export default function MoviesPage() {
+    const [status, setStatus] = useState('resolved');
     const [value, setValue] = useState('');
+    const [query, setQuery] = useState('');
     const [films, setFilms] = useState([]);
 
     const { url } = useRouteMatch();
@@ -21,15 +23,30 @@ export default function MoviesPage() {
             alert('Please, enter film title!');
             return;
         }
-        fetchMovie(value).then(films => { setFilms(films.results) });
+        setQuery(value);
+        fetchMovie(query).then(films => {
+            if (films.results.length === 0) {
+                    return Promise.reject(new Error(`We have not any movie with name '${query}'!`));
+                }
+            setFilms(films.results);
+            setStatus('resolved');
+            console.log('SUBMIT FETCH!!');
+        }).catch(() => {
+            console.log('CATCH is done!')
+            setStatus('rejected');
+            setValue('');
+        });
+        console.log('SUBMIT click!!');
         history.push({...location, search: `query=${value}`});
         setValue('');
     }
 
     const queryParam = new URLSearchParams(location.search).get('query'); 
+    // console.log(queryParam);
 
     useEffect(() => {
         if (!!queryParam) {
+            console.log('USEEFFECT FETCH!!')
             fetchMovie(queryParam).then(films => { setFilms(films.results) });
         }
     }, [queryParam]);
@@ -47,12 +64,13 @@ export default function MoviesPage() {
                 />
                 <button className={s.button} type='submit'>Search</button>
             </form>
-            {films && <ul>
+            {status === 'resolved' && <ul>
                 {films.map(film => {
                     const { title, id } = film;
                     return (<li key={id} className={s.item}><Link to={{ pathname: `${url}/${id}`, state: location }}>{title}</Link></li>)
                 })}
             </ul>}
+            {status === 'rejected' && <h2 className={s.errorQuery}>{`We have not any movie with name '${query}'!`}</h2>}
         </div>
     );
 }
