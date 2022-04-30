@@ -27,8 +27,9 @@ export function fetchMovieById(movieId) {
         }
         return Promise.reject(new Error(`Something go wrong!`));
     }).then(obj => {
-            const {poster_path} = obj;
-            const results = { ...obj, poster_path: `${imagePathUrl}${poster_path}`, };
+        const { poster_path } = obj;
+        const poster = poster_path === null ? '' : `${imagePathUrl}${poster_path}`;
+            const results = { ...obj, poster_path: `${poster}`, };
             return results;
         }).catch(error => console.log(error.message));
 }
@@ -46,8 +47,6 @@ export function fetchMovieCredits(movieId) {
         }).catch(error => console.log(error.message));
 }
 
-// profile_path
-
 export function fetchMovieReviews(movieId) {
     return fetch(`${origin}/movie/${movieId}/reviews?api_key=${apiKey}&language=en-US&page=1`).then(resp => {
         if (resp.ok) {
@@ -56,6 +55,3 @@ export function fetchMovieReviews(movieId) {
         return Promise.reject(new Error(`Something go wrong!`));
         }).catch(error => console.log(error.message));
 }
-
-// https://image.tmdb.org/t/p/w500/kqjL17yufvn9OVLyXYpvtyrFfak.jpg
-

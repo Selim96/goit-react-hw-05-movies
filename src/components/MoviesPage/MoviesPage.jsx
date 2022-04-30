@@ -35,7 +35,7 @@ export default function MoviesPage() {
     }, [queryParam]);
 
     return (
-        <div>
+        <div className={s.moviePage}>
             <form onSubmit={handlSubmit}>
                 <input
                     className={s.input}
@@ -50,7 +50,7 @@ export default function MoviesPage() {
             {films && <ul>
                 {films.map(film => {
                     const { title, id } = film;
-                    return (<li key={id}><Link to={{ pathname: `${url}/${id}`, state: location }}>{title}</Link></li>)
+                    return (<li key={id} className={s.item}><Link to={{ pathname: `${url}/${id}`, state: location }}>{title}</Link></li>)
                 })}
             </ul>}
         </div>

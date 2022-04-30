@@ -1,0 +1,49 @@
+.movieCard {
+    padding-top: 10px;
+}
+
+.button{
+    width: 100px;
+    height: 30px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.button:hover {
+    font-weight: 700;
+    box-shadow: 2px 2px 2px rgb(59, 58, 42);
+}
+
+.movieDetails {
+    display: flex;
+    padding-bottom: 10px;
+    box-shadow: 0px 2px 2px rgb(71, 69, 50);
+}
+
+.movieImage {
+    margin-right: 15px;
+    object-fit: contain;
+}
+
+.genresList {
+    list-style: none;
+    padding-left: 0;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.genresItem {
+    margin-right: 10px;
+}
+
+.additionalCard {
+    padding-top: 15px;
+    padding-bottom: 10px;
+    box-shadow: 0px 2px 2px rgb(71, 69, 50);
+}
+
+.emptyFilm {
+    text-align: center;
+    margin-top: 20px;
+}
