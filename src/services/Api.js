@@ -42,7 +42,10 @@ export function fetchMovieCredits(movieId) {
         return Promise.reject(new Error(`Something go wrong!`));
         }).then(obj => {
             const arrayActors = obj.cast;
-            const results = arrayActors.map(actor=>({...actor, profile_path: `${imagePathUrl}${actor.profile_path}`,}));
+            const results = arrayActors.map(actor => {
+                const image = actor.profile_path === null ? '' : `${imagePathUrl}${actor.profile_path}`;
+                return { ...actor, profile_path: `${image}`, };
+            });
             return results;
         }).catch(error => console.log(error.message));
 }
